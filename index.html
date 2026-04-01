@@ -1,853 +1,1211 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PARKOUR — Movimento Sem Limites</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --black: #0a0a0a;
-      --white: #f5f2ee;
-      --red: #e63228;
-      --orange: #ff6b2b;
-      --gray: #1c1c1c;
-      --mid: #2e2e2e;
-      --text-light: #a0998f;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PARKOUR — Movimento Sem Limites</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --black: #0a0a0a;
+        --white: #f5f2ee;
+        --red: #e63228;
+        --orange: #ff6b2b;
+        --gray: #1c1c1c;
+        --mid: #2e2e2e;
+        --text-light: #a0998f;
+      }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    html { scroll-behavior: smooth; }
+      html {
+        scroll-behavior: smooth;
+      }
 
-    body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
-    }
+      body {
+        background: var(--black);
+        color: var(--white);
+        font-family: "DM Sans", sans-serif;
+        overflow-x: hidden;
+      }
 
-    /* NAVBAR */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 3rem;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid #222;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 3px;
-      color: var(--red);
-    }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-light);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--white); }
+      /* NAVBAR */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.2rem 3rem;
+        background: rgba(10, 10, 10, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid #222;
+      }
+      .nav-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 3px;
+        color: var(--red);
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-light);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .nav-links a:hover {
+        color: var(--white);
+      }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-left {
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 8rem 3rem 5rem;
-      position: relative; z-index: 2;
-    }
-    .hero-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 4px;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 10vw, 10rem);
-      line-height: 0.9;
-      letter-spacing: 2px;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-    .hero-title span { color: var(--red); }
-    .hero-desc {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-light);
-      max-width: 420px;
-      font-weight: 300;
-    }
-    .hero-right {
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-img-wrap {
-      position: absolute; inset: 0;
-    }
-    .hero-img-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: grayscale(30%) contrast(1.1);
-      transform: scale(1.05);
-      animation: zoomIn 8s ease-out forwards;
-    }
-    @keyframes zoomIn { to { transform: scale(1); } }
-    .hero-img-wrap::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, var(--black) 0%, transparent 40%);
-    }
-    .hero-counter {
-      position: absolute; bottom: 3rem; right: 3rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 6rem;
-      color: rgba(230,50,40,0.12);
-      line-height: 1;
-      pointer-events: none;
-      z-index: 3;
-    }
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 8rem 3rem 5rem;
+        position: relative;
+        z-index: 2;
+      }
+      .hero-tag {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 4px;
+        color: var(--red);
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+      .hero-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(5rem, 10vw, 10rem);
+        line-height: 0.9;
+        letter-spacing: 2px;
+        color: var(--white);
+        margin-bottom: 2rem;
+      }
+      .hero-title span {
+        color: var(--red);
+      }
+      .hero-desc {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-light);
+        max-width: 420px;
+        font-weight: 300;
+      }
+      .hero-right {
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-img-wrap {
+        position: absolute;
+        inset: 0;
+      }
+      .hero-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(30%) contrast(1.1);
+        transform: scale(1.05);
+        animation: zoomIn 8s ease-out forwards;
+      }
+      @keyframes zoomIn {
+        to {
+          transform: scale(1);
+        }
+      }
+      .hero-img-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, var(--black) 0%, transparent 40%);
+      }
+      .hero-counter {
+        position: absolute;
+        bottom: 3rem;
+        right: 3rem;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 6rem;
+        color: rgba(230, 50, 40, 0.12);
+        line-height: 1;
+        pointer-events: none;
+        z-index: 3;
+      }
 
-    /* SECTIONS */
-    section { padding: 6rem 3rem; }
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 4px;
-      color: var(--red);
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      line-height: 1;
-      letter-spacing: 1px;
-      margin-bottom: 2.5rem;
-    }
-    .divider {
-      width: 60px; height: 3px;
-      background: var(--red);
-      margin-bottom: 2.5rem;
-    }
+      /* SECTIONS */
+      section {
+        padding: 6rem 3rem;
+      }
+      .section-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        letter-spacing: 4px;
+        color: var(--red);
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .section-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        line-height: 1;
+        letter-spacing: 1px;
+        margin-bottom: 2.5rem;
+      }
+      .divider {
+        width: 60px;
+        height: 3px;
+        background: var(--red);
+        margin-bottom: 2.5rem;
+      }
 
-    /* HISTORIA */
-    .historia {
-      background: var(--gray);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: center;
-    }
-    .historia-text p {
-      color: var(--text-light);
-      line-height: 1.9;
-      font-size: 0.95rem;
-      margin-bottom: 1.2rem;
-      font-weight: 300;
-    }
-    .historia-visual {
-      position: relative;
-    }
-    .historia-img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      border-radius: 2px;
-      filter: grayscale(20%);
-    }
-    .historia-badge {
-      position: absolute; top: -1.5rem; right: -1.5rem;
-      background: var(--red);
-      color: var(--white);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 2px;
-      padding: 0.8rem 1.2rem;
-    }
-    .timeline {
-      margin-top: 2rem;
-      border-left: 2px solid var(--mid);
-      padding-left: 1.5rem;
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.9rem; top: 0.4rem;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--red);
-    }
-    .timeline-year {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--red);
-      margin-bottom: 0.2rem;
-    }
-    .timeline-text {
-      font-size: 0.88rem;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+      /* HISTORIA */
+      .historia {
+        background: var(--gray);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6rem;
+        align-items: center;
+      }
+      .historia-text p {
+        color: var(--text-light);
+        line-height: 1.9;
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        font-weight: 300;
+      }
+      .historia-visual {
+        position: relative;
+      }
+      .historia-img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        border-radius: 2px;
+        filter: grayscale(20%);
+      }
+      .historia-badge {
+        position: absolute;
+        top: -1.5rem;
+        right: -1.5rem;
+        background: var(--red);
+        color: var(--white);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        padding: 0.8rem 1.2rem;
+      }
+      .timeline {
+        margin-top: 2rem;
+        border-left: 2px solid var(--mid);
+        padding-left: 1.5rem;
+      }
+      .timeline-item {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -1.9rem;
+        top: 0.4rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--red);
+      }
+      .timeline-year {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--red);
+        margin-bottom: 0.2rem;
+      }
+      .timeline-text {
+        font-size: 0.88rem;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
 
-    /* REGRAS */
-    .regras { background: var(--black); }
-    .regras-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--mid);
-      border: 1px solid var(--mid);
-    }
-    .regra-card {
-      background: var(--gray);
-      padding: 2.5rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .regra-card:hover { background: #252525; }
-    .regra-number {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem;
-      color: rgba(230,50,40,0.08);
-      position: absolute;
-      top: 0; right: 1rem;
-      line-height: 1;
-    }
-    .regra-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .regra-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 1px;
-      color: var(--white);
-      margin-bottom: 0.8rem;
-    }
-    .regra-text { font-size: 0.88rem; color: var(--text-light); line-height: 1.7; }
+      /* REGRAS */
+      .regras {
+        background: var(--black);
+      }
+      .regras-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--mid);
+        border: 1px solid var(--mid);
+      }
+      .regra-card {
+        background: var(--gray);
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .regra-card:hover {
+        background: #252525;
+      }
+      .regra-number {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 5rem;
+        color: rgba(230, 50, 40, 0.08);
+        position: absolute;
+        top: 0;
+        right: 1rem;
+        line-height: 1;
+      }
+      .regra-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .regra-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+        color: var(--white);
+        margin-bottom: 0.8rem;
+      }
+      .regra-text {
+        font-size: 0.88rem;
+        color: var(--text-light);
+        line-height: 1.7;
+      }
 
-    /* EQUIPAMENTO */
-    .equipamento { background: var(--gray); }
-    .equip-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-    .equip-item {
-      display: flex; align-items: flex-start; gap: 1.2rem;
-      padding: 1.8rem;
-      background: var(--black);
-      border-left: 3px solid transparent;
-      transition: border-color 0.3s;
-    }
-    .equip-item:hover { border-left-color: var(--red); }
-    .equip-icon { font-size: 2rem; flex-shrink: 0; }
-    .equip-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-      margin-bottom: 0.4rem;
-    }
-    .equip-desc { font-size: 0.85rem; color: var(--text-light); line-height: 1.6; }
+      /* EQUIPAMENTO */
+      .equipamento {
+        background: var(--gray);
+      }
+      .equip-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+      .equip-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        padding: 1.8rem;
+        background: var(--black);
+        border-left: 3px solid transparent;
+        transition: border-color 0.3s;
+      }
+      .equip-item:hover {
+        border-left-color: var(--red);
+      }
+      .equip-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .equip-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        margin-bottom: 0.4rem;
+      }
+      .equip-desc {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
 
-    /* FUNDAMENTOS */
-    .fundamentos { background: var(--black); }
-    .fund-tabs { display: flex; gap: 0; margin-bottom: 3rem; border-bottom: 1px solid var(--mid); }
-    .fund-tab {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-light);
-      padding: 1rem 2rem;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s;
-    }
-    .fund-tab.active, .fund-tab:hover { color: var(--white); border-bottom-color: var(--red); }
-    .fund-content { display: none; }
-    .fund-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-    .fund-moves { display: flex; flex-direction: column; gap: 1rem; }
-    .fund-move {
-      padding: 1.2rem 1.5rem;
-      background: var(--gray);
-      border-right: 3px solid var(--red);
-    }
-    .fund-move-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-    .fund-move-desc { font-size: 0.84rem; color: var(--text-light); line-height: 1.6; }
-    .fund-img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
-      filter: grayscale(20%);
-    }
+      /* FUNDAMENTOS */
+      .fundamentos {
+        background: var(--black);
+      }
+      .fund-tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--mid);
+      }
+      .fund-tab {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-light);
+        padding: 1rem 2rem;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+      }
+      .fund-tab.active,
+      .fund-tab:hover {
+        color: var(--white);
+        border-bottom-color: var(--red);
+      }
+      .fund-content {
+        display: none;
+      }
+      .fund-content.active {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      .fund-moves {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .fund-move {
+        padding: 1.2rem 1.5rem;
+        background: var(--gray);
+        border-right: 3px solid var(--red);
+      }
+      .fund-move-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        color: var(--white);
+        margin-bottom: 0.3rem;
+      }
+      .fund-move-desc {
+        font-size: 0.84rem;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
+      .fund-img {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        filter: grayscale(20%);
+      }
 
-    /* BENEFÍCIOS */
-    .beneficios { background: var(--gray); }
-    .benef-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-    .benef-card {
-      padding: 2.5rem;
-      background: var(--black);
-      position: relative;
-    }
-    .benef-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 3px;
-    }
-    .benef-card.fisico::before { background: var(--red); }
-    .benef-card.mental::before { background: var(--orange); }
-    .benef-card.social::before { background: #3b82f6; }
-    .benef-category {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .benef-card.fisico .benef-category { color: var(--red); }
-    .benef-card.mental .benef-category { color: var(--orange); }
-    .benef-card.social .benef-category { color: #3b82f6; }
-    .benef-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      margin-bottom: 1.5rem;
-    }
-    .benef-list { list-style: none; }
-    .benef-list li {
-      font-size: 0.88rem;
-      color: var(--text-light);
-      padding: 0.7rem 0;
-      border-bottom: 1px solid var(--mid);
-      padding-left: 1rem;
-      position: relative;
-      line-height: 1.5;
-    }
-    .benef-list li::before {
-      content: '→';
-      position: absolute; left: 0;
-      color: var(--red);
-      font-size: 0.75rem;
-    }
+      /* BENEFÍCIOS */
+      .beneficios {
+        background: var(--gray);
+      }
+      .benef-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      .benef-card {
+        padding: 2.5rem;
+        background: var(--black);
+        position: relative;
+      }
+      .benef-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+      .benef-card.fisico::before {
+        background: var(--red);
+      }
+      .benef-card.mental::before {
+        background: var(--orange);
+      }
+      .benef-card.social::before {
+        background: #3b82f6;
+      }
+      .benef-category {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+      }
+      .benef-card.fisico .benef-category {
+        color: var(--red);
+      }
+      .benef-card.mental .benef-category {
+        color: var(--orange);
+      }
+      .benef-card.social .benef-category {
+        color: #3b82f6;
+      }
+      .benef-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+      }
+      .benef-list {
+        list-style: none;
+      }
+      .benef-list li {
+        font-size: 0.88rem;
+        color: var(--text-light);
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--mid);
+        padding-left: 1rem;
+        position: relative;
+        line-height: 1.5;
+      }
+      .benef-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--red);
+        font-size: 0.75rem;
+      }
 
-    /* TREINO */
-    .treino { background: var(--black); }
-    .treino-phases {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--mid);
-      margin-bottom: 3rem;
-    }
-    .phase {
-      background: var(--gray);
-      padding: 2rem 1.5rem;
-      text-align: center;
-    }
-    .phase-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      color: var(--red);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    .phase-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      margin-bottom: 0.8rem;
-    }
-    .phase-desc { font-size: 0.82rem; color: var(--text-light); line-height: 1.6; }
-    .treino-plan {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 3rem;
-      align-items: start;
-    }
-    .week-list { list-style: none; }
-    .week-item {
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 0.5rem;
-      background: var(--gray);
-      cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 1px;
-      color: var(--text-light);
-      transition: all 0.3s;
-    }
-    .week-item.active, .week-item:hover { background: var(--red); color: var(--white); }
-    .week-detail { background: var(--gray); padding: 2.5rem; }
-    .week-detail h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-    }
-    .day-row {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 1.5rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--mid);
-    }
-    .day-name {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--red);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding-top: 0.2rem;
-    }
-    .day-activity { font-size: 0.88rem; color: var(--text-light); line-height: 1.6; }
+      /* TREINO */
+      .treino {
+        background: var(--black);
+      }
+      .treino-phases {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--mid);
+        margin-bottom: 3rem;
+      }
+      .phase {
+        background: var(--gray);
+        padding: 2rem 1.5rem;
+        text-align: center;
+      }
+      .phase-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3rem;
+        color: var(--red);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .phase-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        margin-bottom: 0.8rem;
+      }
+      .phase-desc {
+        font-size: 0.82rem;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
+      .treino-plan {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      .week-list {
+        list-style: none;
+      }
+      .week-item {
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 0.5rem;
+        background: var(--gray);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: "Space Mono", monospace;
+        font-size: 0.78rem;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        transition: all 0.3s;
+      }
+      .week-item.active,
+      .week-item:hover {
+        background: var(--red);
+        color: var(--white);
+      }
+      .week-detail {
+        background: var(--gray);
+        padding: 2.5rem;
+      }
+      .week-detail h3 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .day-row {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 1.5rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--mid);
+      }
+      .day-name {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        color: var(--red);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding-top: 0.2rem;
+      }
+      .day-activity {
+        font-size: 0.88rem;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
 
-    /* VIDEOS */
-    .videos { background: var(--gray); }
-    .video-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1.5rem;
-    }
-    .video-main {
-      position: relative;
-      aspect-ratio: 16/9;
-      background: var(--black);
-      overflow: hidden;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-    }
-    .video-side { display: flex; flex-direction: column; gap: 1.5rem; }
-    .video-thumb {
-      position: relative;
-      aspect-ratio: 16/9;
-      background: var(--black);
-      overflow: hidden;
-      cursor: pointer;
-      flex: 1;
-      text-decoration: none;
-      display: block;
-    }
-    .video-main img, .video-thumb img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: brightness(0.7);
-      transition: filter 0.3s;
-    }
-    .video-main:hover img, .video-thumb:hover img { filter: brightness(0.9); }
-    .video-play {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 64px; height: 64px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
-      transition: transform 0.3s, background 0.3s;
-      pointer-events: none;
-    }
-    .video-main:hover .video-play, .video-thumb:hover .video-play {
-      transform: translate(-50%, -50%) scale(1.1);
-      background: #ff1a0f;
-    }
-    .video-label {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 1rem 1.2rem;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-      color: var(--white);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem;
-      letter-spacing: 1px;
-      pointer-events: none;
-    }
+      /* VIDEOS */
+      .videos {
+        background: var(--gray);
+      }
+      .video-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+      }
+      .video-main {
+        position: relative;
+        aspect-ratio: 16/9;
+        background: var(--black);
+        overflow: hidden;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+      }
+      .video-side {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .video-thumb {
+        position: relative;
+        aspect-ratio: 16/9;
+        background: var(--black);
+        overflow: hidden;
+        cursor: pointer;
+        flex: 1;
+        text-decoration: none;
+        display: block;
+      }
+      .video-main img,
+      .video-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+        transition: filter 0.3s;
+      }
+      .video-main:hover img,
+      .video-thumb:hover img {
+        filter: brightness(0.9);
+      }
+      .video-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--white);
+        width: 64px;
+        height: 64px;
+        background: var(--red);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        transition:
+          transform 0.3s,
+          background 0.3s;
+        pointer-events: none;
+      }
+      .video-main:hover .video-play,
+      .video-thumb:hover .video-play {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: #ff1a0f;
+      }
+      .video-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem 1.2rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+        color: var(--white);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        pointer-events: none;
+      }
 
-    /* GALERIA */
-    .galeria { background: var(--black); padding: 4rem 3rem; }
-    .galeria-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: 250px 250px;
-      gap: 6px;
-    }
-    .gal-item {
-      overflow: hidden;
-      position: relative;
-    }
-    .gal-item:first-child { grid-column: span 2; grid-row: span 2; }
-    .gal-item:nth-child(4) { grid-column: span 2; }
-    .gal-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: grayscale(30%) contrast(1.1);
-      transition: transform 0.6s ease, filter 0.4s;
-    }
-    .gal-item:hover img { transform: scale(1.08); filter: grayscale(0%) contrast(1.1); }
+      /* GALERIA */
+      .galeria {
+        background: var(--black);
+        padding: 4rem 3rem;
+      }
+      .galeria-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 250px 250px;
+        gap: 6px;
+      }
+      .gal-item {
+        overflow: hidden;
+        position: relative;
+      }
+      .gal-item:first-child {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .gal-item:nth-child(4) {
+        grid-column: span 2;
+      }
+      .gal-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(30%) contrast(1.1);
+        transition:
+          transform 0.6s ease,
+          filter 0.4s;
+      }
+      .gal-item:hover img {
+        transform: scale(1.08);
+        filter: grayscale(0%) contrast(1.1);
+      }
 
-    /* REFERENCIAS */
-    .referencias { background: var(--gray); }
-    .ref-list { list-style: none; }
-    .ref-item {
-      padding: 1.2rem 1.5rem;
-      margin-bottom: 0.8rem;
-      background: var(--black);
-      border-left: 3px solid var(--mid);
-      font-size: 0.85rem;
-      color: var(--text-light);
-      line-height: 1.8;
-      transition: border-color 0.3s;
-    }
-    .ref-item:hover { border-left-color: var(--red); }
-    .ref-item a { color: var(--orange); text-decoration: none; }
-    .ref-item a:hover { text-decoration: underline; }
+      /* REFERENCIAS */
+      .referencias {
+        background: var(--gray);
+      }
+      .ref-list {
+        list-style: none;
+      }
+      .ref-item {
+        padding: 1.2rem 1.5rem;
+        margin-bottom: 0.8rem;
+        background: var(--black);
+        border-left: 3px solid var(--mid);
+        font-size: 0.85rem;
+        color: var(--text-light);
+        line-height: 1.8;
+        transition: border-color 0.3s;
+      }
+      .ref-item:hover {
+        border-left-color: var(--red);
+      }
+      .ref-item a {
+        color: var(--orange);
+        text-decoration: none;
+      }
+      .ref-item a:hover {
+        text-decoration: underline;
+      }
 
-    /* FOOTER */
-    footer {
-      background: var(--black);
-      border-top: 1px solid var(--mid);
-      padding: 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      color: var(--red);
-      letter-spacing: 3px;
-    }
-    .footer-text {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--text-light);
-      letter-spacing: 2px;
-      text-align: right;
-    }
+      /* FOOTER */
+      footer {
+        background: var(--black);
+        border-top: 1px solid var(--mid);
+        padding: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .footer-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        color: var(--red);
+        letter-spacing: 3px;
+      }
+      .footer-text {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        color: var(--text-light);
+        letter-spacing: 2px;
+        text-align: right;
+      }
 
-    /* SCROLL REVEAL */
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+      /* SCROLL REVEAL */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-right { display: none; }
-      .historia { grid-template-columns: 1fr; }
-      .historia-visual { display: none; }
-      .regras-grid { grid-template-columns: 1fr; }
-      .equip-list { grid-template-columns: 1fr; }
-      .fund-content.active { grid-template-columns: 1fr; }
-      .benef-grid { grid-template-columns: 1fr; }
-      .treino-phases { grid-template-columns: repeat(2,1fr); }
-      .treino-plan { grid-template-columns: 1fr; }
-      .video-grid { grid-template-columns: 1fr; }
-      .galeria-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: auto; }
-      .gal-item:first-child { grid-column: span 2; }
-      .gal-item:nth-child(4) { grid-column: span 2; }
-      nav { padding: 1rem 1.5rem; }
-      section { padding: 4rem 1.5rem; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">PARKOUR</div>
-  <ul class="nav-links">
-    <li><a href="#historia">História</a></li>
-    <li><a href="#regras">Regras</a></li>
-    <li><a href="#equipamento">Equipamento</a></li>
-    <li><a href="#fundamentos">Fundamentos</a></li>
-    <li><a href="#beneficios">Benefícios</a></li>
-    <li><a href="#treino">Treino</a></li>
-    <li><a href="#videos">Vídeos</a></li>
-    <li><a href="#referencias">Referências</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="topo">
-  <div class="hero-left">
-    <div class="hero-tag">Desporto Alternativo</div>
-    <h1 class="hero-title">MOVI<span>MENTO</span><br>SEM<br>LIMITES</h1>
-    <p class="hero-desc">Parkour é a arte do movimento — superar obstáculos urbanos com fluidez, força e criatividade. Uma disciplina que transforma a cidade numa arena de possibilidades infinitas.</p>
-  </div>
-  <div class="hero-right">
-    <div class="hero-img-wrap">
-      <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80" alt="Praticante de Parkour a saltar entre edifícios"/>
-    </div>
-  </div>
-  <div class="hero-counter">01</div>
-</section>
-
-<!-- HISTÓRIA -->
-<section class="historia reveal" id="historia">
-  <div class="historia-text">
-    <div class="section-label">01 — Origem & Evolução</div>
-    <h2 class="section-title">HISTÓRIA DO PARKOUR</h2>
-    <div class="divider"></div>
-    <p>O Parkour nasceu em França nos anos 80, desenvolvido por David Belle, inspirado nos métodos de treino militar <em>méthode naturelle</em> do seu pai, Raymond Belle. A filosofia central é simples: mover-se de um ponto A para um ponto B da forma mais eficiente possível.</p>
-    <p>Originalmente chamado "l'art du déplacement" (a arte do deslocamento), rapidamente ganhou identidade própria. Georges Hébert, militar francês do início do século XX, influenciou profundamente a disciplina com os seus métodos de treino baseados em obstáculos naturais e urbanos.</p>
-    <p>Nos anos 2000, o parkour explodiu globalmente graças a documentários, filmes e redes sociais, tornando-se uma forma de expressão artística e desportiva reconhecida mundialmente — e em 2024, deu os primeiros passos para integrar os Jogos Olímpicos.</p>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-year">1902</div>
-        <div class="timeline-text">Georges Hébert desenvolve a <em>méthode naturelle</em>, base filosófica do movimento.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">1987</div>
-        <div class="timeline-text">David Belle começa a praticar com o grupo Yamakasi em Lisses, França.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">1997</div>
-        <div class="timeline-text">O termo "Parkour" é oficialmente cunhado por Hubert Koundé.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">2003</div>
-        <div class="timeline-text">Documentário "Jump London" leva o parkour ao mundo anglófono.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">2017</div>
-        <div class="timeline-text">Parkour é reconhecido como desporto oficial no Reino Unido.</div>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-year">2024</div>
-        <div class="timeline-text">Inclusão em programas olímpicos de breakdance e desportos urbanos.</div>
-      </div>
-    </div>
-  </div>
-  <div class="historia-visual">
-    <img class="historia-img" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80" alt="Parkour urbano"/>
-    <div class="historia-badge">DEPUIS 1987</div>
-  </div>
-</section>
-
-<!-- REGRAS -->
-<section class="regras reveal" id="regras">
-  <div class="section-label">02 — Princípios do Jogo</div>
-  <h2 class="section-title">REGRAS & OBJETIVOS</h2>
-  <div class="divider"></div>
-  <div class="regras-grid">
-    <div class="regra-card">
-      <div class="regra-number">01</div>
-      <div class="regra-icon">🎯</div>
-      <div class="regra-title">Eficiência do Movimento</div>
-      <p class="regra-text">O objetivo principal é mover-se do ponto A ao B pela rota mais eficiente possível, sem obstáculos desnecessários e com o mínimo de esforço desperdiçado.</p>
-    </div>
-    <div class="regra-card">
-      <div class="regra-number">02</div>
-      <div class="regra-icon">🔒</div>
-      <div class="regra-title">Segurança Acima de Tudo</div>
-      <p class="regra-text">Nunca tentes um movimento para o qual não estás preparado. A progressão gradual é fundamental — domina cada técnica antes de avançar para desafios maiores.</p>
-    </div>
-    <div class="regra-card">
-      <div class="regra-number">03</div>
-      <div class="regra-icon">🏛️</div>
-      <div class="regra-title">Respeito pelo Espaço</div>
-      <p class="regra-text">Respeita o ambiente urbano e as pessoas ao redor. Não danifiques propriedade, não perturbes o espaço público e pede sempre autorização quando necessário.</p>
-    </div>
-    <div class="regra-card">
-      <div class="regra-number">04</div>
-      <div class="regra-icon">🤝</div>
-      <div class="regra-title">Comunidade & Partilha</div>
-      <p class="regra-text">O parkour tem uma forte cultura de partilha de conhecimento. Mais experientes devem ajudar iniciantes, criando uma comunidade solidária e inclusiva.</p>
-    </div>
-    <div class="regra-card">
-      <div class="regra-number">05</div>
-      <div class="regra-icon">🧠</div>
-      <div class="regra-title">Mentalidade de Crescimento</div>
-      <p class="regra-text">Enfrenta os obstáculos como desafios de superação pessoal. Cada falha é uma oportunidade de aprender — a persistência é a chave do desenvolvimento.</p>
-    </div>
-    <div class="regra-card">
-      <div class="regra-number">06</div>
-      <div class="regra-icon">⚖️</div>
-      <div class="regra-title">Treino Completo</div>
-      <p class="regra-text">Treina força, condição física e técnica de forma equilibrada. O corpo é a tua única ferramenta — mantê-lo forte e saudável é uma obrigação do praticante.</p>
-    </div>
-  </div>
-</section>
-
-<!-- EQUIPAMENTO -->
-<section class="equipamento reveal" id="equipamento">
-  <div class="section-label">03 — O que levar</div>
-  <h2 class="section-title">EQUIPAMENTO NECESSÁRIO</h2>
-  <div class="divider"></div>
-  <div class="equip-list">
-    <div class="equip-item">
-      <div class="equip-icon">👟</div>
-      <div>
-        <div class="equip-name">Calçado de Parkour</div>
-        <p class="equip-desc">Sapatilhas com sola de borracha de alta aderência, biqueira reforçada e perfil baixo. Marcas como La Sportiva, Feiyue ou Nike Free são referência. Evita solas muito grossas que reduzem o feedback do chão.</p>
-      </div>
-    </div>
-    <div class="equip-item">
-      <div class="equip-icon">👕</div>
-      <div>
-        <div class="equip-name">Roupa Funcional</div>
-        <p class="equip-desc">Calças de treino com elastano que permitem amplitude total de movimento. Camisola leve e respirável. Evita roupas largas que possam enganchar em obstáculos.</p>
-      </div>
-    </div>
-    <div class="equip-item">
-      <div class="equip-icon">🧤</div>
-      <div>
-        <div class="equip-name">Luvas (Opcional)</div>
-        <p class="equip-desc">Algumas superfícies rugosas beneficiam do uso de luvas. Contudo, muitos praticantes preferem o contacto direto com as mãos para melhor sensibilidade e controlo.</p>
-      </div>
-    </div>
-    <div class="equip-item">
-      <div class="equip-icon">🎒</div>
-      <div>
-        <div class="equip-name">Mochila Leve</div>
-        <p class="equip-desc">Para carregar água, toalha e kit de primeiros socorros básico. Usar mochila bem ajustada para não alterar o centro de gravidade durante os movimentos.</p>
-      </div>
-    </div>
-    <div class="equip-item">
-      <div class="equip-icon">💧</div>
-      <div>
-        <div class="equip-name">Hidratação</div>
-        <p class="equip-desc">Uma garrafa de água de 500ml a 1L é essencial. O parkour é um desporto de alta intensidade — manteres-te hidratado é crucial para o desempenho e segurança.</p>
-      </div>
-    </div>
-    <div class="equip-item">
-      <div class="equip-icon">🩹</div>
-      <div>
-        <div class="equip-name">Kit de Primeiros Socorros</div>
-        <p class="equip-desc">Pensos rápidos, ligaduras e spray antisséptico. Arranhões e escoriações são comuns, especialmente em iniciantes. Estar preparado é parte da mentalidade de segurança.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FUNDAMENTOS -->
-<section class="fundamentos reveal" id="fundamentos">
-  <div class="section-label">04 — Técnicas & Tática</div>
-  <h2 class="section-title">FUNDAMENTOS TÉCNICOS</h2>
-  <div class="divider"></div>
-  <div class="fund-tabs">
-    <div class="fund-tab active" onclick="showTab('tecnicos')">Técnicos</div>
-    <div class="fund-tab" onclick="showTab('taticos')">Táticos</div>
-  </div>
-  <div class="fund-content active" id="tecnicos">
-    <div class="fund-moves">
-      <div class="fund-move">
-        <div class="fund-move-name">Vault (Passagem)</div>
-        <p class="fund-move-desc">Técnica de ultrapassar obstáculos horizontais com as mãos. Inclui variantes como Speed Vault, Kong Vault e Lazy Vault, cada uma otimizada para diferentes situações e velocidades.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Precision Jump (Salto de Precisão)</div>
-        <p class="fund-move-desc">Salto controlado de um ponto a outro com aterragem precisa e equilibrada. Fundamental para o desenvolvimento da consciência espacial e controlo corporal.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Cat Leap (Gato)</div>
-        <p class="fund-move-desc">Salto em direção a uma superfície vertical, agarrando-a com as mãos e apoiando os pés. Usado para alcançar superfícies elevadas a partir de uma corrida.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Tic-Tac (Ricochete)</div>
-        <p class="fund-move-desc">Usar uma parede ou obstáculo vertical como trampolim para ganhar altura ou mudar de direção. Requer timing preciso e boa leitura do espaço.</p>
-      </div>
-    </div>
-    <img class="fund-img" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80" alt="Técnicas de parkour"/>
-  </div>
-  <div class="fund-content" id="taticos">
-    <div class="fund-moves">
-      <div class="fund-move">
-        <div class="fund-move-name">Leitura do Terreno</div>
-        <p class="fund-move-desc">Analisar o ambiente antes de agir. Um bom praticante "lê" o espaço urbano como uma língua, identificando pontos de apoio, linhas de movimento e zonas de risco.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Fluxo de Movimento</div>
-        <p class="fund-move-desc">Encadear movimentos sem paragens desnecessárias. O objetivo é manter o momentum para maximizar a eficiência energética e a velocidade de deslocamento.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Gestão de Risco</div>
-        <p class="fund-move-desc">Avaliar cada obstáculo em função da capacidade atual. Nunca ceder à pressão social para tentar algo perigoso — a autodisciplina é uma tática central.</p>
-      </div>
-      <div class="fund-move">
-        <div class="fund-move-name">Adaptação ao Ambiente</div>
-        <p class="fund-move-desc">O mesmo percurso pode exigir técnicas diferentes consoante as condições — chuva, luz solar, superfícies escorregadias. A adaptabilidade é uma competência tática crucial.</p>
-      </div>
-    </div>
-    <img class="fund-img" src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&q=80" alt="Tática no parkour"/>
-  </div>
-</section>
-
-<!-- BENEFÍCIOS -->
-<section class="beneficios reveal" id="beneficios">
-  <div class="section-label">05 — Por que praticar</div>
-  <h2 class="section-title">BENEFÍCIOS DA PRÁTICA</h2>
-  <div class="divider"></div>
-  <div class="benef-grid">
-    <div class="benef-card fisico">
-      <div class="benef-category">Físicos</div>
-      <div class="benef-title">CORPO EM FORMA</div>
-      <ul class="benef-list">
-        <li>Desenvolvimento de força funcional (membros superiores e inferiores)</li>
-        <li>Melhoria da resistência cardiovascular e pulmonar</li>
-        <li>Aumento significativo da flexibilidade e mobilidade articular</li>
-        <li>Desenvolvimento do equilíbrio e propriocepção</li>
-        <li>Queima calórica elevada — equivalente a HIIT</li>
-        <li>Fortalecimento dos tendões e ligamentos</li>
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+        .hero-right {
+          display: none;
+        }
+        .historia {
+          grid-template-columns: 1fr;
+        }
+        .historia-visual {
+          display: none;
+        }
+        .regras-grid {
+          grid-template-columns: 1fr;
+        }
+        .equip-list {
+          grid-template-columns: 1fr;
+        }
+        .fund-content.active {
+          grid-template-columns: 1fr;
+        }
+        .benef-grid {
+          grid-template-columns: 1fr;
+        }
+        .treino-phases {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .treino-plan {
+          grid-template-columns: 1fr;
+        }
+        .video-grid {
+          grid-template-columns: 1fr;
+        }
+        .galeria-grid {
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: auto;
+        }
+        .gal-item:first-child {
+          grid-column: span 2;
+        }
+        .gal-item:nth-child(4) {
+          grid-column: span 2;
+        }
+        nav {
+          padding: 1rem 1.5rem;
+        }
+        section {
+          padding: 4rem 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">PARKOUR</div>
+      <ul class="nav-links">
+        <li><a href="#historia">História</a></li>
+        <li><a href="#regras">Regras</a></li>
+        <li><a href="#equipamento">Equipamento</a></li>
+        <li><a href="#fundamentos">Fundamentos</a></li>
+        <li><a href="#beneficios">Benefícios</a></li>
+        <li><a href="#treino">Treino</a></li>
+        <li><a href="#videos">Vídeos</a></li>
+        <li><a href="#referencias">Referências</a></li>
       </ul>
-    </div>
-    <div class="benef-card mental">
-      <div class="benef-category">Mentais</div>
-      <div class="benef-title">MENTE FORTE</div>
-      <ul class="benef-list">
-        <li>Redução do stress e ansiedade através do movimento</li>
-        <li>Desenvolvimento da concentração e foco no momento presente</li>
-        <li>Superação de medos e limitações psicológicas</li>
-        <li>Aumento da autoconfiança e autoestima</li>
-        <li>Estimulação da criatividade e resolução de problemas</li>
-        <li>Melhoria da resiliência mental perante adversidades</li>
-      </ul>
-    </div>
-    <div class="benef-card social">
-      <div class="benef-category">Sociais</div>
-      <div class="benef-title">COMUNIDADE</div>
-      <ul class="benef-list">
-        <li>Integração numa comunidade global inclusiva e solidária</li>
-        <li>Desenvolvimento de competências de liderança e cooperação</li>
-        <li>Partilha de cultura e filosofia de vida saudável</li>
-        <li>Conexão com o espaço urbano de forma criativa</li>
-        <li>Redes sociais genuínas baseadas em valores partilhados</li>
-        <li>Acesso a um estilo de vida ativo e significativo</li>
-      </ul>
-    </div>
-  </div>
-</section>
+    </nav>
 
-<!-- TREINO -->
-<section class="treino reveal" id="treino">
+    <!-- HERO -->
+    <section class="hero" id="topo">
+      <div class="hero-left">
+        <div class="hero-tag">Desporto Alternativo</div>
+        <h1 class="hero-title">MOVI<span>MENTO</span><br />SEM<br />LIMITES</h1>
+        <p class="hero-desc">
+          Parkour é a arte do movimento — superar obstáculos urbanos com fluidez, força e criatividade. Uma disciplina que transforma a cidade numa arena de
+          possibilidades infinitas.
+        </p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-img-wrap">
+          <img src="assets/img/parkour-banner.jpg" alt="Praticante de Parkour a saltar entre objetos" />
+        </div>
+      </div>
+      <div class="hero-counter">01</div>
+    </section>
+
+    <!-- HISTÓRIA -->
+    <section class="historia reveal" id="historia">
+      <div class="historia-text">
+        <div class="section-label">01 — Origem & Evolução</div>
+        <h2 class="section-title">HISTÓRIA DO PARKOUR</h2>
+        <div class="divider"></div>
+        <p>
+          O Parkour nasceu em França nos anos 80, desenvolvido por David Belle, inspirado nos métodos de treino militar <em>méthode naturelle</em> do seu pai,
+          Raymond Belle. A filosofia central é simples: mover-se de um ponto A para um ponto B da forma mais eficiente possível.
+        </p>
+        <p>
+          Originalmente chamado "l'art du déplacement" (a arte do deslocamento), rapidamente ganhou identidade própria. Georges Hébert, militar francês do
+          início do século XX, influenciou profundamente a disciplina com os seus métodos de treino baseados em obstáculos naturais e urbanos.
+        </p>
+        <p>
+          Nos anos 2000, o parkour explodiu globalmente graças a documentários, filmes e redes sociais, tornando-se uma forma de expressão artística e
+          desportiva reconhecida mundialmente — e em 2024, deu os primeiros passos para integrar os Jogos Olímpicos.
+        </p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">1902</div>
+            <div class="timeline-text">Georges Hébert desenvolve a <em>méthode naturelle</em>, base filosófica do movimento.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">1987</div>
+            <div class="timeline-text">David Belle começa a praticar com o grupo Yamakasi em Lisses, França.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">1997</div>
+            <div class="timeline-text">O termo "Parkour" é oficialmente cunhado por Hubert Koundé.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2003</div>
+            <div class="timeline-text">Documentário "Jump London" leva o parkour ao mundo anglófono.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2017</div>
+            <div class="timeline-text">Parkour é reconhecido como desporto oficial no Reino Unido.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-text">Inclusão em programas olímpicos de breakdance e desportos urbanos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="historia-visual">
+        <img class="historia-img" src="assets/img/Lieutenant_Hébert.jpg" alt="Foto lieutenant hebert" />
+        <div class="historia-badge">Georges Hébert</div>
+      </div>
+    </section>
+
+    <!-- REGRAS -->
+    <section class="regras reveal" id="regras">
+      <div class="section-label">02 — Princípios do Jogo</div>
+      <h2 class="section-title">REGRAS & OBJETIVOS</h2>
+      <div class="divider"></div>
+      <div class="regras-grid">
+        <div class="regra-card">
+          <div class="regra-number">01</div>
+          <div class="regra-icon">🎯</div>
+          <div class="regra-title">Eficiência do Movimento</div>
+          <p class="regra-text">
+            O objetivo principal é mover-se do ponto A ao B pela rota mais eficiente possível, sem obstáculos desnecessários e com o mínimo de esforço
+            desperdiçado.
+          </p>
+        </div>
+        <div class="regra-card">
+          <div class="regra-number">02</div>
+          <div class="regra-icon">🔒</div>
+          <div class="regra-title">Segurança Acima de Tudo</div>
+          <p class="regra-text">
+            Nunca tentes um movimento para o qual não estás preparado. A progressão gradual é fundamental — domina cada técnica antes de avançar para desafios
+            maiores.
+          </p>
+        </div>
+        <div class="regra-card">
+          <div class="regra-number">03</div>
+          <div class="regra-icon">🏛️</div>
+          <div class="regra-title">Respeito pelo Espaço</div>
+          <p class="regra-text">
+            Respeita o ambiente urbano e as pessoas ao redor. Não danifiques propriedade, não perturbes o espaço público e pede sempre autorização quando
+            necessário.
+          </p>
+        </div>
+        <div class="regra-card">
+          <div class="regra-number">04</div>
+          <div class="regra-icon">🤝</div>
+          <div class="regra-title">Comunidade & Partilha</div>
+          <p class="regra-text">
+            O parkour tem uma forte cultura de partilha de conhecimento. Mais experientes devem ajudar iniciantes, criando uma comunidade solidária e inclusiva.
+          </p>
+        </div>
+        <div class="regra-card">
+          <div class="regra-number">05</div>
+          <div class="regra-icon">🧠</div>
+          <div class="regra-title">Mentalidade de Crescimento</div>
+          <p class="regra-text">
+            Enfrenta os obstáculos como desafios de superação pessoal. Cada falha é uma oportunidade de aprender — a persistência é a chave do desenvolvimento.
+          </p>
+        </div>
+        <div class="regra-card">
+          <div class="regra-number">06</div>
+          <div class="regra-icon">⚖️</div>
+          <div class="regra-title">Treino Completo</div>
+          <p class="regra-text">
+            Treina força, condição física e técnica de forma equilibrada. O corpo é a tua única ferramenta — mantê-lo forte e saudável é uma obrigação do
+            praticante.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EQUIPAMENTO -->
+    <section class="equipamento reveal" id="equipamento">
+      <div class="section-label">03 — O que levar</div>
+      <h2 class="section-title">EQUIPAMENTO NECESSÁRIO</h2>
+      <div class="divider"></div>
+      <div class="equip-list">
+        <div class="equip-item">
+          <div class="equip-icon">👟</div>
+          <div>
+            <div class="equip-name">Calçado de Parkour</div>
+            <p class="equip-desc">
+              Sapatilhas com sola de borracha de alta aderência, biqueira reforçada e perfil baixo. Marcas como La Sportiva, Feiyue ou Nike Free são referência.
+              Evita solas muito grossas que reduzem o feedback do chão.
+            </p>
+          </div>
+        </div>
+        <div class="equip-item">
+          <div class="equip-icon">👕</div>
+          <div>
+            <div class="equip-name">Roupa Funcional</div>
+            <p class="equip-desc">
+              Calças de treino com elastano que permitem amplitude total de movimento. Camisola leve e respirável. Evita roupas largas que possam enganchar em
+              obstáculos.
+            </p>
+          </div>
+        </div>
+        <div class="equip-item">
+          <div class="equip-icon">🧤</div>
+          <div>
+            <div class="equip-name">Luvas (Opcional)</div>
+            <p class="equip-desc">
+              Algumas superfícies rugosas beneficiam do uso de luvas. Contudo, muitos praticantes preferem o contacto direto com as mãos para melhor
+              sensibilidade e controlo.
+            </p>
+          </div>
+        </div>
+        <div class="equip-item">
+          <div class="equip-icon">🎒</div>
+          <div>
+            <div class="equip-name">Mochila Leve</div>
+            <p class="equip-desc">
+              Para carregar água, toalha e kit de primeiros socorros básico. Usar mochila bem ajustada para não alterar o centro de gravidade durante os
+              movimentos.
+            </p>
+          </div>
+        </div>
+        <div class="equip-item">
+          <div class="equip-icon">💧</div>
+          <div>
+            <div class="equip-name">Hidratação</div>
+            <p class="equip-desc">
+              Uma garrafa de água de 500ml a 1L é essencial. O parkour é um desporto de alta intensidade — manteres-te hidratado é crucial para o desempenho e
+              segurança.
+            </p>
+          </div>
+        </div>
+        <div class="equip-item">
+          <div class="equip-icon">🩹</div>
+          <div>
+            <div class="equip-name">Kit de Primeiros Socorros</div>
+            <p class="equip-desc">
+              Pensos rápidos, ligaduras e spray antisséptico. Arranhões e escoriações são comuns, especialmente em iniciantes. Estar preparado é parte da
+              mentalidade de segurança.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNDAMENTOS -->
+    <section class="fundamentos reveal" id="fundamentos">
+      <div class="section-label">04 — Técnicas & Tática</div>
+      <h2 class="section-title">FUNDAMENTOS TÉCNICOS</h2>
+      <div class="divider"></div>
+      <div class="fund-tabs">
+        <div class="fund-tab active" onclick="showTab('tecnicos')">Técnicos</div>
+        <div class="fund-tab" onclick="showTab('taticos')">Táticos</div>
+      </div>
+      <div class="fund-content active" id="tecnicos">
+        <div class="fund-moves">
+          <div class="fund-move">
+            <div class="fund-move-name">Vault (Passagem)</div>
+            <p class="fund-move-desc">
+              Técnica de ultrapassar obstáculos horizontais com as mãos. Inclui variantes como Speed Vault, Kong Vault e Lazy Vault, cada uma otimizada para
+              diferentes situações e velocidades.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Precision Jump (Salto de Precisão)</div>
+            <p class="fund-move-desc">
+              Salto controlado de um ponto a outro com aterragem precisa e equilibrada. Fundamental para o desenvolvimento da consciência espacial e controlo
+              corporal.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Cat Leap (Gato)</div>
+            <p class="fund-move-desc">
+              Salto em direção a uma superfície vertical, agarrando-a com as mãos e apoiando os pés. Usado para alcançar superfícies elevadas a partir de uma
+              corrida.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Tic-Tac (Ricochete)</div>
+            <p class="fund-move-desc">
+              Usar uma parede ou obstáculo vertical como trampolim para ganhar altura ou mudar de direção. Requer timing preciso e boa leitura do espaço.
+            </p>
+          </div>
+        </div>
+        <img class="fund-img" src="assets/img/parkour-1.jpeg" alt="Técnicas de parkour" />
+      </div>
+      <div class="fund-content" id="taticos">
+        <div class="fund-moves">
+          <div class="fund-move">
+            <div class="fund-move-name">Leitura do Terreno</div>
+            <p class="fund-move-desc">
+              Analisar o ambiente antes de agir. Um bom praticante "lê" o espaço urbano como uma língua, identificando pontos de apoio, linhas de movimento e
+              zonas de risco.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Fluxo de Movimento</div>
+            <p class="fund-move-desc">
+              Encadear movimentos sem paragens desnecessárias. O objetivo é manter o momentum para maximizar a eficiência energética e a velocidade de
+              deslocamento.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Gestão de Risco</div>
+            <p class="fund-move-desc">
+              Avaliar cada obstáculo em função da capacidade atual. Nunca ceder à pressão social para tentar algo perigoso — a autodisciplina é uma tática
+              central.
+            </p>
+          </div>
+          <div class="fund-move">
+            <div class="fund-move-name">Adaptação ao Ambiente</div>
+            <p class="fund-move-desc">
+              O mesmo percurso pode exigir técnicas diferentes consoante as condições — chuva, luz solar, superfícies escorregadias. A adaptabilidade é uma
+              competência tática crucial.
+            </p>
+          </div>
+        </div>
+        <img class="fund-img" src="assets/img/parkour-2.jpg" alt="Tática no parkour" />
+      </div>
+    </section>
+
+    <!-- BENEFÍCIOS -->
+    <section class="beneficios reveal" id="beneficios">
+      <div class="section-label">05 — Por que praticar</div>
+      <h2 class="section-title">BENEFÍCIOS DA PRÁTICA</h2>
+      <div class="divider"></div>
+      <div class="benef-grid">
+        <div class="benef-card fisico">
+          <div class="benef-category">Físicos</div>
+          <div class="benef-title">CORPO EM FORMA</div>
+          <ul class="benef-list">
+            <li>Desenvolvimento de força funcional (membros superiores e inferiores)</li>
+            <li>Melhoria da resistência cardiovascular e pulmonar</li>
+            <li>Aumento significativo da flexibilidade e mobilidade articular</li>
+            <li>Desenvolvimento do equilíbrio e propriocepção</li>
+            <li>Queima calórica elevada — equivalente a HIIT</li>
+            <li>Fortalecimento dos tendões e ligamentos</li>
+          </ul>
+        </div>
+        <div class="benef-card mental">
+          <div class="benef-category">Mentais</div>
+          <div class="benef-title">MENTE FORTE</div>
+          <ul class="benef-list">
+            <li>Redução do stress e ansiedade através do movimento</li>
+            <li>Desenvolvimento da concentração e foco no momento presente</li>
+            <li>Superação de medos e limitações psicológicas</li>
+            <li>Aumento da autoconfiança e autoestima</li>
+            <li>Estimulação da criatividade e resolução de problemas</li>
+            <li>Melhoria da resiliência mental perante adversidades</li>
+          </ul>
+        </div>
+        <div class="benef-card social">
+          <div class="benef-category">Sociais</div>
+          <div class="benef-title">COMUNIDADE</div>
+          <ul class="benef-list">
+            <li>Integração numa comunidade global inclusiva e solidária</li>
+            <li>Desenvolvimento de competências de liderança e cooperação</li>
+            <li>Partilha de cultura e filosofia de vida saudável</li>
+            <li>Conexão com o espaço urbano de forma criativa</li>
+            <li>Redes sociais genuínas baseadas em valores partilhados</li>
+            <li>Acesso a um estilo de vida ativo e significativo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TREINO -->
+    <!-- <section class="treino reveal" id="treino">
+      <div class="section-label">06 — Para Iniciantes</div>
+      <h2 class="section-title">PLANO DE TREINO</h2>
+      <div class="divider"></div>
+      <div class="treino-phases">
+        <div class="phase">
+          <div class="phase-num">1</div>
+          <div class="phase-name">Base Física</div>
+          <p class="phase-desc">Semanas 1–4: Fortalecer o corpo para suportar os impactos do parkour.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-num">2</div>
+          <div class="phase-name">Técnica Básica</div>
+          <p class="phase-desc">Semanas 5–8: Aprender os movimentos fundamentais em superfícies baixas.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-num">3</div>
+          <div class="phase-name">Progressão</div>
+          <p class="phase-desc">Semanas 9–12: Combinar técnicas e introduzir obstáculos mais complexos.</p>
+        </div>
+        <div class="phase">
+          <div class="phase-num">4</div>
+          <div class="phase-name">Fluência</div>
+          <p class="phase-desc">Semanas 13+: Encadear movimentos com fluxo natural e desenvolver estilo.</p>
+        </div>
+      </div>
+      <div class="treino-plan">
+        <ul class="week-list">
+          <li class="week-item active" onclick="showWeek(this, 1)">SEMANA 1 — BASE FÍSICA <span>▶</span></li>
+          <li class="week-item" onclick="showWeek(this, 2)">SEMANA 2 — SALTOS <span>▶</span></li>
+          <li class="week-item" onclick="showWeek(this, 3)">SEMANA 3 — VAULTS <span>▶</span></li>
+          <li class="week-item" onclick="showWeek(this, 4)">SEMANA 4 — FLUXO <span>▶</span></li>
+        </ul>
+        <div class="week-detail" id="week-detail">
+          <h3>SEMANA 1 — BASE FÍSICA</h3>
+          <div class="day-row">
+            <div class="day-name">2ª Feira</div>
+            <div class="day-activity">30 flexões, 50 agachamentos, 3×30s prancha. Foco na qualidade do movimento, não na velocidade.</div>
+          </div>
+          <div class="day-row">
+            <div class="day-name">3ª Feira</div>
+            <div class="day-activity">Corrida de 20 minutos a ritmo moderado + alongamentos dinâmicos de 15 minutos.</div>
+          </div>
+          <div class="day-row">
+            <div class="day-name">4ª Feira</div>
+            <div class="day-activity">Descanso ativo — caminhada ou yoga leve. Foco na mobilidade dos tornozelos e pulsos.</div>
+          </div>
+          <div class="day-row">
+            <div class="day-name">5ª Feira</div>
+            <div class="day-activity">Exercícios de quadrupedia (movimentos gato), equilíbrio em bordas baixas por 10 minutos.</div>
+          </div>
+          <div class="day-row">
+            <div class="day-name">6ª Feira</div>
+            <div class="day-activity">Treino de saltos em comprimento no chão — 3×8 repetições com foco na aterragem silenciosa.</div>
+          </div>
+          <div class="day-row">
+            <div class="day-name">Sábado</div>
+            <div class="day-activity">Sessão de exploração — caminhar pelo espaço urbano identificando possíveis obstáculos de treino.</div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <section class="treino reveal" id="treino">
   <div class="section-label">06 — Para Iniciantes</div>
   <h2 class="section-title">PLANO DE TREINO</h2>
   <div class="divider"></div>
@@ -860,17 +1218,17 @@
     <div class="phase">
       <div class="phase-num">2</div>
       <div class="phase-name">Técnica Básica</div>
-      <p class="phase-desc">Semanas 5–8: Aprender os movimentos fundamentais em superfícies baixas.</p>
+      <p class="phase-desc">Semanas 5–8: Cat Leap, Tic-Tac, altura e resistência.</p>
     </div>
     <div class="phase">
       <div class="phase-num">3</div>
       <div class="phase-name">Progressão</div>
-      <p class="phase-desc">Semanas 9–12: Combinar técnicas e introduzir obstáculos mais complexos.</p>
+      <p class="phase-desc">Semanas 9–10: Criar linhas próprias e ganhar velocidade.</p>
     </div>
     <div class="phase">
       <div class="phase-num">4</div>
       <div class="phase-name">Fluência</div>
-      <p class="phase-desc">Semanas 13+: Encadear movimentos com fluxo natural e desenvolver estilo.</p>
+      <p class="phase-desc">Semanas 11–12: Criatividade, expressão e consolidação final.</p>
     </div>
   </div>
   <div class="treino-plan">
@@ -879,6 +1237,14 @@
       <li class="week-item" onclick="showWeek(this, 2)">SEMANA 2 — SALTOS <span>▶</span></li>
       <li class="week-item" onclick="showWeek(this, 3)">SEMANA 3 — VAULTS <span>▶</span></li>
       <li class="week-item" onclick="showWeek(this, 4)">SEMANA 4 — FLUXO <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 5)">SEMANA 5 — CAT LEAP <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 6)">SEMANA 6 — TIC-TAC <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 7)">SEMANA 7 — ALTURA <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 8)">SEMANA 8 — RESISTÊNCIA <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 9)">SEMANA 9 — LINHAS <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 10)">SEMANA 10 — VELOCIDADE <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 11)">SEMANA 11 — CRIATIVIDADE <span>▶</span></li>
+      <li class="week-item" onclick="showWeek(this, 12)">SEMANA 12 — CONSOLIDAÇÃO <span>▶</span></li>
     </ul>
     <div class="week-detail" id="week-detail">
       <h3>SEMANA 1 — BASE FÍSICA</h3>
@@ -910,166 +1276,280 @@
   </div>
 </section>
 
-<!-- VÍDEOS -->
-<section class="videos reveal" id="videos">
-  <div class="section-label">07 — Multimedia</div>
-  <h2 class="section-title">VÍDEOS</h2>
-  <div class="divider"></div>
-  <div class="video-grid">
-    <a class="video-main" href="https://www.youtube.com/watch?v=WEb5e0MGPRY" target="_blank" rel="noopener">
-      <img src="https://img.youtube.com/vi/WEb5e0MGPRY/maxresdefault.jpg" alt="Parkour — O que é?"/>
-      <div class="video-play">▶</div>
-      <div class="video-label">Parkour — O que é? (Documentário)</div>
-    </a>
-    <div class="video-side">
-      <a class="video-thumb" href="https://www.youtube.com/watch?v=fHjgHBpIyck" target="_blank" rel="noopener">
-        <img src="https://img.youtube.com/vi/fHjgHBpIyck/hqdefault.jpg" alt="Fundamentos Parkour"/>
-        <div class="video-play" style="width:44px;height:44px;font-size:1rem;">▶</div>
-        <div class="video-label" style="font-size:0.85rem;">Fundamentos para Iniciantes</div>
-      </a>
-      <a class="video-thumb" href="https://www.youtube.com/watch?v=RMSZ7pGp7UM" target="_blank" rel="noopener">
-        <img src="https://img.youtube.com/vi/RMSZ7pGp7UM/hqdefault.jpg" alt="Treino Parkour Iniciantes"/>
-        <div class="video-play" style="width:44px;height:44px;font-size:1rem;">▶</div>
-        <div class="video-label" style="font-size:0.85rem;">Plano de Treino para Iniciantes</div>
-      </a>
-    </div>
-  </div>
-</section>
+    <!-- VÍDEOS -->
+    <section class="videos reveal" id="videos">
+      <div class="section-label">07 — Multimedia</div>
+      <h2 class="section-title">VÍDEOS</h2>
+      <div class="divider"></div>
+      <div class="video-grid">
+        <a class="video-main" href="https://www.youtube.com/watch?v=Jb5VTn5D3ao" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/Jb5VTn5D3ao/hqdefault.jpg" alt="Parkour! Como este desporto mantém o corpo e a mente em forma" />
+          <div class="video-play" style="width: 44px; height: 44px; font-size: 1rem">▶</div>
+          <div class="video-label" style="font-size: 0.85rem">Parkour! Como este desporto mantém o corpo e a mente em forma | Taylor Lynn Carpenter | TED</div>
+        </a>
+        <div class="video-side">
+          <a class="video-thumb" href="https://www.youtube.com/watch?v=DxEomfCerLY" target="_blank" rel="noopener">
+            <img src="https://img.youtube.com/vi/DxEomfCerLY/hqdefault.jpg" alt="Nível fácil Habilidades para iniciantes" />
+            <div class="video-play" style="width: 44px; height: 44px; font-size: 1rem">▶</div>
+            <div class="video-label" style="font-size: 0.85rem">【 Parkour 】 Nível fácil Habilidades para iniciantes</div>
+          </a>
+          <a class="video-thumb" href="https://www.youtube.com/watch?v=yLdVz34ATpA&t=3s" target="_blank" rel="noopener">
+            <img src="https://img.youtube.com/vi/yLdVz34ATpA/maxresdefault.jpg" alt="Parkour POV em Lisboa" />
+            <div class="video-play">▶</div>
+            <div class="video-label">Parkour POV em Lisboa</div>
+          </a>
+        </div>
+      </div>
+    </section>
 
-<!-- GALERIA -->
-<section class="galeria reveal">
-  <div class="section-label">08 — Galeria</div>
-  <h2 class="section-title">MOMENTOS</h2>
-  <div class="divider"></div>
-  <div class="galeria-grid">
-    <div class="gal-item">
-      <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80" alt="Parkour salto urbano"/>
-    </div>
-    <div class="gal-item">
-      <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80" alt="Parkour muro"/>
-    </div>
-    <div class="gal-item">
-      <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&q=80" alt="Treino parkour"/>
-    </div>
-    <div class="gal-item">
-      <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=600&q=80" alt="Parkour agilidade"/>
-    </div>
-    <div class="gal-item">
-      <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&q=80" alt="Movimento urbano"/>
-    </div>
-  </div>
-</section>
+    <!-- GALERIA -->
+    <!-- <section class="galeria reveal">
+      <div class="section-label">08 — Galeria</div>
+      <h2 class="section-title">MOMENTOS</h2>
+      <div class="divider"></div>
+      <div class="galeria-grid">
+        <div class="gal-item">
+          <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80" alt="Parkour salto urbano" />
+        </div>
+        <div class="gal-item">
+          <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80" alt="Parkour muro" />
+        </div>
+        <div class="gal-item">
+          <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&q=80" alt="Treino parkour" />
+        </div>
+        <div class="gal-item">
+          <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=600&q=80" alt="Parkour agilidade" />
+        </div>
+        <div class="gal-item">
+          <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&q=80" alt="Movimento urbano" />
+        </div>
+      </div>
+    </section> -->
 
-<!-- REFERÊNCIAS -->
-<section class="referencias reveal" id="referencias">
-  <div class="section-label">09 — Fontes</div>
-  <h2 class="section-title">REFERÊNCIAS APA</h2>
-  <div class="divider"></div>
-  <ul class="ref-list">
-    <li class="ref-item">Atkinson, M. (2009). Parkour, anarcho-environmentalism, and poiesis. <em>Journal of Sport and Social Issues, 33</em>(2), 169–194. <a href="https://doi.org/10.1177/0193723509332582">https://doi.org/10.1177/0193723509332582</a></li>
-    <li class="ref-item">Belle, D. (2009). <em>Parkour</em>. Intervista.</li>
-    <li class="ref-item">Daskalaki, M., Stara, A., & Imas, M. (2008). The 'Parkour organisation': Inhabitation of corporate spaces. <em>Culture and Organization, 14</em>(1), 49–64. <a href="https://doi.org/10.1080/14759550701797222">https://doi.org/10.1080/14759550701797222</a></li>
-    <li class="ref-item">Edwardes, D. (2009). <em>The Parkour & Freerunning Handbook</em>. Virgin Books.</li>
-    <li class="ref-item">Fuggle, S. (2008). Discourses of subversion: The ethics and aesthetics of capoeira and parkour. <em>Journal of Dance and Somatic Practices, 1</em>(1), 3–19.</li>
-    <li class="ref-item">Guss, N. (2011). Parkour and the multitude: Politics, movement, and the city. <em>French Cultural Studies, 22</em>(3), 201–215. <a href="https://doi.org/10.1177/0957155811403218">https://doi.org/10.1177/0957155811403218</a></li>
-    <li class="ref-item">Kidder, J. L. (2012). Parkour, the affective appropriation of urban space, and the real/virtual dialectic. <em>City & Community, 11</em>(3), 229–253. <a href="https://doi.org/10.1111/j.1540-6040.2012.01408.x">https://doi.org/10.1111/j.1540-6040.2012.01408.x</a></li>
-    <li class="ref-item">Rossheim, M. E., & Stephenson, C. J. (2017). Injuries in parkour: The relationships between experience level and injury characteristics. <em>Orthopaedic Journal of Sports Medicine, 5</em>(8). <a href="https://doi.org/10.1177/2325967117723930">https://doi.org/10.1177/2325967117723930</a></li>
-    <li class="ref-item">Saville, S. J. (2008). Playing with fear: Parkour and the mobility of emotion. <em>Social & Cultural Geography, 9</em>(8), 891–914. <a href="https://doi.org/10.1080/14649360802441440">https://doi.org/10.1080/14649360802441440</a></li>
-    <li class="ref-item">Wheaton, B. (2004). <em>Understanding lifestyle sports: Consumption, identity and difference</em>. Routledge.</li>
-  </ul>
-</section>
+    <!-- REFERÊNCIAS -->
+    <section class="referencias reveal" id="referencias">
+      <div class="section-label">08 — Fontes</div>
+      <h2 class="section-title">REFERÊNCIAS APA</h2>
+      <div class="divider"></div>
+      <ul class="ref-list">
+        <li class="ref-item">
+          Atkinson, M. (2009). Parkour, anarcho-environmentalism, and poiesis. <em>Journal of Sport and Social Issues, 33</em>(2), 169–194.
+          <a href="https://doi.org/10.1177/0193723509332582">https://doi.org/10.1177/0193723509332582</a>
+        </li>
+        <li class="ref-item">Belle, D. (2009). <em>Parkour</em>. Intervista.</li>
+        <li class="ref-item">
+          Daskalaki, M., Stara, A., & Imas, M. (2008). The 'Parkour organisation': Inhabitation of corporate spaces. <em>Culture and Organization, 14</em>(1),
+          49–64. <a href="https://doi.org/10.1080/14759550701797222">https://doi.org/10.1080/14759550701797222</a>
+        </li>
+        <li class="ref-item">Edwardes, D. (2009). <em>The Parkour & Freerunning Handbook</em>. Virgin Books.</li>
+        <li class="ref-item">
+          Fuggle, S. (2008). Discourses of subversion: The ethics and aesthetics of capoeira and parkour. <em>Journal of Dance and Somatic Practices, 1</em>(1),
+          3–19.
+        </li>
+        <li class="ref-item">
+          Guss, N. (2011). Parkour and the multitude: Politics, movement, and the city. <em>French Cultural Studies, 22</em>(3), 201–215.
+          <a href="https://doi.org/10.1177/0957155811403218">https://doi.org/10.1177/0957155811403218</a>
+        </li>
+        <li class="ref-item">
+          Kidder, J. L. (2012). Parkour, the affective appropriation of urban space, and the real/virtual dialectic. <em>City & Community, 11</em>(3), 229–253.
+          <a href="https://doi.org/10.1111/j.1540-6040.2012.01408.x">https://doi.org/10.1111/j.1540-6040.2012.01408.x</a>
+        </li>
+        <li class="ref-item">
+          Rossheim, M. E., & Stephenson, C. J. (2017). Injuries in parkour: The relationships between experience level and injury characteristics.
+          <em>Orthopaedic Journal of Sports Medicine, 5</em>(8). <a href="https://doi.org/10.1177/2325967117723930">https://doi.org/10.1177/2325967117723930</a>
+        </li>
+        <li class="ref-item">
+          Saville, S. J. (2008). Playing with fear: Parkour and the mobility of emotion. <em>Social & Cultural Geography, 9</em>(8), 891–914.
+          <a href="https://doi.org/10.1080/14649360802441440">https://doi.org/10.1080/14649360802441440</a>
+        </li>
+        <li class="ref-item">Wheaton, B. (2004). <em>Understanding lifestyle sports: Consumption, identity and difference</em>. Routledge.</li>
+      </ul>
+    </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">PARKOUR</div>
-  <div class="footer-text">
-    <div>Movimento Sem Limites</div>
-    <div style="margin-top:0.5rem; color: #555;">Trabalho Académico — Desportos Alternativos</div>
-  </div>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">PARKOUR</div>
+      <div class="footer-text">
+        <div>Movimento Sem Limites</div>
+        <div style="margin-top: 0.5rem; color: #555">Trabalho Académico — Desportos Alternativos</div>
+      </div>
+    </footer>
 
-<script>
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
+    <script>
+      // Scroll reveal
+      const reveals = document.querySelectorAll(".reveal");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("visible");
+          });
+        },
+        { threshold: 0.1 },
+      );
+      reveals.forEach((r) => observer.observe(r));
 
-  // Fundamentos tabs
-  function showTab(tab) {
-    document.querySelectorAll('.fund-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.fund-content').forEach(c => c.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById(tab).classList.add('active');
-  }
+      // Fundamentos tabs
+      function showTab(tab) {
+        document.querySelectorAll(".fund-tab").forEach((t) => t.classList.remove("active"));
+        document.querySelectorAll(".fund-content").forEach((c) => c.classList.remove("active"));
+        event.target.classList.add("active");
+        document.getElementById(tab).classList.add("active");
+      }
 
-  // Treino weeks
-  const weekData = {
-    1: {
-      title: 'SEMANA 1 — BASE FÍSICA',
-      days: [
-        ['2ª Feira', '30 flexões, 50 agachamentos, 3×30s prancha. Foco na qualidade do movimento, não na velocidade.'],
-        ['3ª Feira', 'Corrida de 20 minutos a ritmo moderado + alongamentos dinâmicos de 15 minutos.'],
-        ['4ª Feira', 'Descanso ativo — caminhada ou yoga leve. Foco na mobilidade dos tornozelos e pulsos.'],
-        ['5ª Feira', 'Exercícios de quadrupedia (movimentos gato), equilíbrio em bordas baixas por 10 minutos.'],
-        ['6ª Feira', 'Treino de saltos em comprimento no chão — 3×8 repetições com foco na aterragem silenciosa.'],
-        ['Sábado', 'Sessão de exploração — caminhar pelo espaço urbano identificando possíveis obstáculos de treino.']
-      ]
-    },
-    2: {
-      title: 'SEMANA 2 — SALTOS DE PRECISÃO',
-      days: [
-        ['2ª Feira', 'Saltos em comprimento de uma marca para outra desenhada no chão. Foco na aterragem controlada.'],
-        ['3ª Feira', 'Saltos verticais para cima de obstáculos baixos (10–30cm). Aterragem em dois pés, silenciosa.'],
-        ['4ª Feira', 'Descanso ativo + alongamentos de 20 minutos focados em cadeia posterior.'],
-        ['5ª Feira', 'Saltos de precisão em bordas — 3×10 repetições, aterragem em pé a pé alternado.'],
-        ['6ª Feira', 'Combinar corrida + salto de precisão em sequência. 5 repetições com descanso entre cada.'],
-        ['Sábado', 'Sessão de campo livre num parque — explorar e aplicar os saltos em ambiente real.']
-      ]
-    },
-    3: {
-      title: 'SEMANA 3 — INTRODUÇÃO AOS VAULTS',
-      days: [
-        ['2ª Feira', 'Praticar o Speed Vault (passagem lateral) sobre obstáculo baixo em câmara lenta — 3×10.'],
-        ['3ª Feira', 'Treino de força dos pulsos: apoios em superfícies variadas + 40 flexões em variantes.'],
-        ['4ª Feira', 'Descanso ativo. Visualização mental dos movimentos aprendidos.'],
-        ['5ª Feira', 'Kong Vault sobre obstáculo baixo — 3×8 repetições. Foco no lançamento das ancas.'],
-        ['6ª Feira', 'Combinar Speed Vault + Kong Vault em sequência. Repetir 5 vezes com descanso.'],
-        ['Sábado', 'Sessão gravada em vídeo — analisar os próprios movimentos para identificar melhorias.']
-      ]
-    },
-    4: {
-      title: 'SEMANA 4 — FLUÊNCIA & ENCADEAMENTO',
-      days: [
-        ['2ª Feira', 'Criar uma linha de 5 obstáculos e percorrê-la sem parar. Repetir 8 vezes com 2 min descanso.'],
-        ['3ª Feira', 'Treino de resistência: 3 rounds de 5 min de corrida urbana a explorar o espaço livremente.'],
-        ['4ª Feira', 'Descanso ativo + mobilidade completa — 30 minutos de streching e yoga.'],
-        ['5ª Feira', 'Introdução ao Cat Leap — em parede baixa (1m), aterrar com mãos e pés na parede.'],
-        ['6ª Feira', 'Sessão longa: linha de 8 obstáculos combinando todos os movimentos aprendidos.'],
-        ['Sábado', 'Sessão social — treinar com outros praticantes e partilhar técnicas aprendidas.']
-      ]
-    }
-  };
+      // Treino weeks
+      const weekData = {
+        1: {
+          title: "SEMANA 1 — BASE FÍSICA",
+          days: [
+            ["2ª Feira", "30 flexões, 50 agachamentos, 3×30s prancha. Foco na qualidade do movimento, não na velocidade."],
+            ["3ª Feira", "Corrida de 20 minutos a ritmo moderado + alongamentos dinâmicos de 15 minutos."],
+            ["4ª Feira", "Descanso ativo — caminhada ou yoga leve. Foco na mobilidade dos tornozelos e pulsos."],
+            ["5ª Feira", "Exercícios de quadrupedia (movimentos gato), equilíbrio em bordas baixas por 10 minutos."],
+            ["6ª Feira", "Treino de saltos em comprimento no chão — 3×8 repetições com foco na aterragem silenciosa."],
+            ["Sábado", "Sessão de exploração — caminhar pelo espaço urbano identificando possíveis obstáculos de treino."],
+          ],
+        },
+        2: {
+          title: "SEMANA 2 — SALTOS DE PRECISÃO",
+          days: [
+            ["2ª Feira", "Saltos em comprimento de uma marca para outra desenhada no chão. Foco na aterragem controlada."],
+            ["3ª Feira", "Saltos verticais para cima de obstáculos baixos (10–30cm). Aterragem em dois pés, silenciosa."],
+            ["4ª Feira", "Descanso ativo + alongamentos de 20 minutos focados em cadeia posterior."],
+            ["5ª Feira", "Saltos de precisão em bordas — 3×10 repetições, aterragem em pé a pé alternado."],
+            ["6ª Feira", "Combinar corrida + salto de precisão em sequência. 5 repetições com descanso entre cada."],
+            ["Sábado", "Sessão de campo livre num parque — explorar e aplicar os saltos em ambiente real."],
+          ],
+        },
+        3: {
+          title: "SEMANA 3 — INTRODUÇÃO AOS VAULTS",
+          days: [
+            ["2ª Feira", "Praticar o Speed Vault (passagem lateral) sobre obstáculo baixo em câmara lenta — 3×10."],
+            ["3ª Feira", "Treino de força dos pulsos: apoios em superfícies variadas + 40 flexões em variantes."],
+            ["4ª Feira", "Descanso ativo. Visualização mental dos movimentos aprendidos."],
+            ["5ª Feira", "Kong Vault sobre obstáculo baixo — 3×8 repetições. Foco no lançamento das ancas."],
+            ["6ª Feira", "Combinar Speed Vault + Kong Vault em sequência. Repetir 5 vezes com descanso."],
+            ["Sábado", "Sessão gravada em vídeo — analisar os próprios movimentos para identificar melhorias."],
+          ],
+        },
+        4: {
+          title: "SEMANA 4 — FLUÊNCIA & ENCADEAMENTO",
+          days: [
+            ["2ª Feira", "Criar uma linha de 5 obstáculos e percorrê-la sem parar. Repetir 8 vezes com 2 min descanso."],
+            ["3ª Feira", "Treino de resistência: 3 rounds de 5 min de corrida urbana a explorar o espaço livremente."],
+            ["4ª Feira", "Descanso ativo + mobilidade completa — 30 minutos de streching e yoga."],
+            ["5ª Feira", "Introdução ao Cat Leap — em parede baixa (1m), aterrar com mãos e pés na parede."],
+            ["6ª Feira", "Sessão longa: linha de 8 obstáculos combinando todos os movimentos aprendidos."],
+            ["Sábado", "Sessão social — treinar com outros praticantes e partilhar técnicas aprendidas."],
+          ],
+        },
+        5: {
+          title: "SEMANA 5 — CAT LEAP & WALL RUN",
+          days: [
+            ["2ª Feira", "Cat Leap progressivo: começar em paredes de 80cm, aumentar gradualmente para 1.2m. 4×8 repetições com foco na aterragem silenciosa."],
+            ["3ª Feira", "Wall Run básico — correr em direção à parede e subir 2–3 passos. 3×10 repetições, descanso de 90s entre séries."],
+            ["4ª Feira", "Descanso ativo. Trabalho de força de dedos e pulsos: pendurar em bordas durante 3×20s."],
+            ["5ª Feira", "Combinar corrida + Cat Leap + descida controlada. 6 repetições completas com descanso entre cada."],
+            ["6ª Feira", "Treino de força complementar: 4×10 dominadas, 4×15 dips, 3×12 remadas."],
+            ["Sábado", "Exploração livre — encontrar paredes adequadas para praticar Cat Leap em ambiente real."],
+          ],
+        },
+        6: {
+          title: "SEMANA 6 — TIC-TAC & MUDANÇA DE DIREÇÃO",
+          days: [
+            ["2ª Feira", "Tic-Tac básico em parede baixa (90cm): aproximar em ângulo, pé na parede, saltar para o lado. 4×8 repetições."],
+            ["3ª Feira", "Exercícios de agilidade lateral: escada de coordenação, cones em zigue-zague, 20 minutos."],
+            ["4ª Feira", "Descanso ativo. Mobilidade de tornozelos e joelhos — fundamental para o Tic-Tac."],
+            ["5ª Feira", "Tic-Tac progressivo: aumentar a altura da parede para 1.2m. Combinar com Kong Vault na saída."],
+            ["6ª Feira", "Circuito completo: corrida + Tic-Tac + Vault + Precision Jump. 5 repetições com 3 min descanso."],
+            ["Sábado", "Sessão de vídeo — gravar e analisar o Tic-Tac para corrigir ângulo de aproximação e timing."],
+          ],
+        },
+        7: {
+          title: "SEMANA 7 — GANHAR ALTURA",
+          days: [
+            ["2ª Feira", "Saltos verticais máximos: 5×5 saltos explosivos para cima de plataformas progressivas (40cm, 60cm, 80cm)."],
+            ["3ª Feira", "Treino pliométrico: 3×10 caixas de salto, 3×8 saltos de profundidade com ricochete imediato."],
+            ["4ª Feira", "Descanso ativo. Trabalho de core: 4×20 elevações de pernas, 4×30s prancha lateral."],
+            ["5ª Feira", "Combinar Wall Run + Cat Leap em sequência para alcançar superfícies elevadas. 6 repetições."],
+            ["6ª Feira", "Revisão de todos os movimentos aprendidos até agora em sessão contínua de 40 minutos."],
+            ["Sábado", "Treino com parceiro — um sugere o obstáculo, o outro executa. Alternar papéis."],
+          ],
+        },
+        8: {
+          title: "SEMANA 8 — RESISTÊNCIA & CONSOLIDAÇÃO",
+          days: [
+            ["2ª Feira", "Corrida de parkour contínua: 45 minutos a explorar o ambiente urbano sem parar, incorporando movimentos naturalmente."],
+            ["3ª Feira", "Circuito de força: 5 rounds de 10 flexões + 10 dominadas + 10 agachamentos explosivos. Descanso mínimo."],
+            ["4ª Feira", "Descanso completo. Alongamentos profundos e trabalho de recuperação muscular."],
+            ["5ª Feira", "Linha longa: criar um percurso de 15+ obstáculos e percorrê-lo 4 vezes com 5 min descanso."],
+            ["6ª Feira", "Treino técnico focado nos pontos mais fracos identificados nas semanas anteriores."],
+            ["Sábado", "Avaliação de progresso — repetir os primeiros exercícios da semana 1 e comparar a evolução."],
+          ],
+        },
+        9: {
+          title: "SEMANA 9 — CRIAÇÃO DE LINHAS",
+          days: [
+            ["2ª Feira", "Mapear 3 percursos diferentes no mesmo espaço urbano. Praticar cada um 3 vezes."],
+            ["3ª Feira", "Treino de precisão avançado: saltos para alvos cada vez mais pequenos (bordas de 10cm de largura)."],
+            ["4ª Feira", "Descanso ativo. Visualização mental dos percursos — imaginar cada movimento antes de executar."],
+            ["5ª Feira", "Executar os 3 percursos mapeados na 2ª feira em sequência, sem pausa entre eles."],
+            ["6ª Feira", "Treino de força específica: exercícios de puxada em bordas, equilíbrio em superfícies irregulares."],
+            ["Sábado", "Exploração de um novo espaço urbano — parque, centro histórico, zona industrial."],
+          ],
+        },
+        10: {
+          title: "SEMANA 10 — VELOCIDADE & EFICIÊNCIA",
+          days: [
+            ["2ª Feira", "Cronometrar uma linha de 10 obstáculos. Repetir 6 vezes tentando melhorar o tempo sem sacrificar a técnica."],
+            ["3ª Feira", "Sprints curtos (20m) com obstáculo no meio: 8×sprints com 90s descanso."],
+            ["4ª Feira", "Descanso ativo. Trabalho de reatividade: exercícios de resposta rápida a estímulos visuais."],
+            ["5ª Feira", "Combinar velocidade máxima com técnica de vault — Speed Vault em corrida real sem abrandar."],
+            ["6ª Feira", "Sessão de comparação: executar o mesmo percurso lentamente (foco técnico) e rapidamente (foco velocidade)."],
+            ["Sábado", "Jam de parkour — sessão longa de 2h num espaço variado com exploração livre."],
+          ],
+        },
+        11: {
+          title: "SEMANA 11 — CRIATIVIDADE & EXPRESSÃO",
+          days: [
+            ["2ª Feira", "Freerunning: usar os movimentos técnicos de forma criativa, adicionando giros e variações estéticas."],
+            ["3ª Feira", 'Criar uma sequência de 8 movimentos únicos e memorizá-la — o teu primeiro "flow" pessoal.'],
+            ["4ª Feira", "Descanso ativo. Ver vídeos de praticantes avançados e identificar técnicas a incorporar."],
+            ["5ª Feira", "Gravar a sequência criada na 3ª feira em vídeo — rever e refinar a estética do movimento."],
+            ["6ª Feira", "Adaptar a sequência a 3 ambientes diferentes: parque, escadas, zona comercial."],
+            ["Sábado", "Sessão com comunidade local de parkour — partilhar o flow criado e aprender com os outros."],
+          ],
+        },
+        12: {
+          title: "SEMANA 12 — CONSOLIDAÇÃO FINAL",
+          days: [
+            ["2ª Feira", "Revisão técnica completa: executar um movimento de cada categoria aprendida com foco máximo na forma."],
+            ["3ª Feira", "Percurso desafio: criar o percurso mais complexo já tentado e executá-lo 5 vezes."],
+            ["4ª Feira", "Descanso completo. Reflexão sobre o progresso das últimas 12 semanas."],
+            ["5ª Feira", "Treino em condições variadas: superfícies húmidas (com cuidado redobrado), luz reduzida, superfícies irregulares."],
+            ["6ª Feira", "Sessão de documentação: filmar um vídeo completo mostrando a evolução desde a semana 1."],
+            ["Sábado", "Celebração de progresso — sessão livre no teu espaço favorito. Sem pressão, só movimento e prazer."],
+          ],
+        },
+      };
 
-  function showWeek(el, num) {
-    document.querySelectorAll('.week-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    const d = weekData[num];
-    const detail = document.getElementById('week-detail');
-    detail.innerHTML = `<h3>${d.title}</h3>` + d.days.map(([day, act]) =>
-      `<div class="day-row"><div class="day-name">${day}</div><div class="day-activity">${act}</div></div>`
-    ).join('');
-  }
+      function showWeek(el, num) {
+        document.querySelectorAll(".week-item").forEach((i) => i.classList.remove("active"));
+        el.classList.add("active");
+        const d = weekData[num];
+        const detail = document.getElementById("week-detail");
+        detail.innerHTML =
+          `<h3>${d.title}</h3>` +
+          d.days.map(([day, act]) => `<div class="day-row"><div class="day-name">${day}</div><div class="day-activity">${act}</div></div>`).join("");
+      }
 
-  // Smooth nav
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const t = document.querySelector(a.getAttribute('href'));
-      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-</script>
-</body>
+      // Smooth nav
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+    </script>
+  </body>
 </html>
